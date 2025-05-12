@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Snow Cake Celebration</title>
+  <style>
+    body {
+      margin: 0;
+      background: #2c3e50;
+      overflow: hidden;
+      font-family: sans-serif;
+    }
+
+    .cake {
+      position: absolute;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+    }
+
+    .layer {
+      height: 50px;
+      width: 100%;
+      background: #f39c12;
+      border-radius: 10px;
+      box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+    }
+
+    .layer:nth-child(2) {
+      background: #e67e22;
+      width: 160px;
+      margin: 0 auto;
+      margin-top: -10px;
+    }
+
+    .layer:nth-child(3) {
+      background: #d35400;
+      width: 120px;
+      margin: 0 auto;
+      margin-top: -10px;
+    }
+
+    .icing {
+      height: 15px;
+      background: white;
+      border-radius: 50%/100%;
+      margin-top: -5px;
+      position: relative;
+    }
+
+    .candles {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .candle {
+      display: inline-block;
+      width: 10px;
+      height: 30px;
+      background: #fff;
+      margin: 0 5px;
+      border-radius: 2px;
+      position: relative;
+    }
+
+    .flame {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      width: 6px;
+      height: 10px;
+      background: gold;
+      border-radius: 50%;
+      transform: translateX(-50%);
+      animation: flicker 0.2s infinite alternate;
+    }
+
+    @keyframes flicker {
+      0% { transform: translateX(-50%) scale(1); opacity: 1; }
+      100% { transform: translateX(-50%) scale(1.2); opacity: 0.7; }
+    }
+
+    .snowflake {
+      position: fixed;
+      top: -10px;
+      color: white;
+      font-size: 1em;
+      user-select: none;
+      pointer-events: none;
+      z-index: 1000;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+        0% {
+            transform: translate(-20vh, -10vh) rotate(0deg);
+        }
+        30% {
+            transform: translate(25vh, 0) rotate(180deg);
+        }
+        
+        100% {
+            transform: translate(5vh, 100vh) rotate(360deg);
+        }
+    }
+    .firework {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: radial-gradient(circle, yellow, red, orange);
+      opacity: 0.8;
+      animation: burst 1s ease-out forwards;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    @keyframes burst {
+      0% {
+        transform: scale(0);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(3);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cake">
+    <div class="candles">
+      <div class="candle"><div class="flame"></div></div>
+      <div class="candle"><div class="flame"></div></div>
+      <div class="candle"><div class="flame"></div></div>
+    </div>
+    <div class="layer"></div>
+    <div class="layer icing"></div>
+    <div class="layer icing"></div>
+    <div class="layer"></div>
+    <div class="layer icing"></div>
+    <div class="layer"></div>
+    
+  </div>
+
+  <script>
+    const snowCount = 100;
+    for (let i = 0; i < snowCount; i++) {
+      const snow = document.createElement("div");
+      snow.className = "snowflake";
+      snow.style.left = Math.random() * 100 + "vw";
+      snow.style.animationDuration = (Math.random() * 3 + 2) + "s";
+      snow.style.fontSize = "16px";
+      snow.style.opacity = Math.random();
+      snow.innerText = "❄";
+      document.body.appendChild(snow);
+    }
+
+    // Firework burst animation
+    function launchFirecracker() {
+      const count = 8 + Math.floor(Math.random() * 6); // 8–13 particles
+      const originX = Math.random() * window.innerWidth;
+      const originY = Math.random() * (window.innerHeight * 0.6);
+
+      for (let i = 0; i < count; i++) {
+        const fw = document.createElement("div");
+        fw.className = "firework";
+        fw.style.left = originX + "px";
+        fw.style.top = originY + "px";
+        fw.style.background = `radial-gradient(circle, ${randomColor()}, white)`;
+        document.body.appendChild(fw);
+        setTimeout(() => fw.remove(), 1000);
+      }
+    }
+
+    function randomColor() {
+      const colors = ['#ff0', '#f00', '#0ff', '#0f0', '#f0f', '#fff', '#ffa500'];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    setInterval(launchFirecracker, 1800);
+    
+
+    function lightCandles() {
+      document.querySelectorAll('.flame').forEach(f => f.classList.remove('hidden'));
+      const msg = new SpeechSynthesisUtterance("Happy Birthday! Wishing you a wonderful year filled with love, joy, peace.");
+      msg.lang = 'en-US';
+      speechSynthesis.speak(msg);
+    }
+
+  </script>
+
+</body>
+</html>
