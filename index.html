@@ -11,68 +11,93 @@
         font-family: sans-serif;
       }
 
-      .cake {
+      .fancy-cake {
         position: absolute;
-        bottom: 50px;
+        bottom: 80px;
         left: 50%;
         transform: translateX(-50%);
-        width: 200px;
+        width: 180px;
+        z-index: 5;
       }
 
-      .layer {
-        height: 50px;
-        width: 100%;
-        background: #f39c12;
+      .plate {
+        width: 220px;
+        height: 20px;
+        background: #ccc;
         border-radius: 10px;
-        box-shadow: 0 3px 0 rgba(0, 0, 0, 0.2);
+        margin: 0 auto 5px;
       }
 
-      .layer:nth-child(2) {
-        background: #e67e22;
-        width: 160px;
+      .cake-layer {
+        width: 100%;
+        height: 40px;
         margin: 0 auto;
+        border-radius: 10px;
+        box-shadow: inset 0 2px 4px rgba(255,255,255,0.3);
+      }
+
+      .bottom-layer {
+        background: #ffadad;
+      }
+
+      .middle-layer {
+        background: #ffd6a5;
         margin-top: -10px;
       }
 
-      .layer:nth-child(3) {
-        background: #d35400;
-        width: 120px;
-        margin: 0 auto;
+      .top-layer {
+        background: #caffbf;
         margin-top: -10px;
       }
 
       .icing {
         height: 15px;
         background: white;
-        border-radius: 50%/100%;
+        border-radius: 10px 10px 0 0;
         margin-top: -5px;
-        position: relative;
+        box-shadow: 0 5px 5px rgba(0,0,0,0.1);
+      }
+
+      .drip {
+        position: absolute;
+        bottom: 0;
+        width: 10px;
+        height: 20px;
+        background: white;
+        border-radius: 0 0 10px 10px;
+        animation: dripWave 2s ease-in-out infinite;
+      }
+
+      @keyframes dripWave {
+        0% { transform: scaleY(1); }
+        50% { transform: scaleY(1.3); }
+        100% { transform: scaleY(1); }
       }
 
       .candles {
-        text-align: center;
-        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: -20px;
       }
 
       .candle {
-        display: inline-block;
-        width: 10px;
+        width: 8px;
         height: 30px;
         background: #fff;
-        margin: 0 5px;
         border-radius: 2px;
         position: relative;
       }
 
       .flame {
         position: absolute;
-        top: -10px;
+        top: -12px;
         left: 50%;
-        width: 6px;
+        transform: translateX(-50%);
+        width: 8px;
         height: 10px;
         background: gold;
         border-radius: 50%;
-        transform: translateX(-50%);
         animation: flicker 0.2s infinite alternate;
       }
 
@@ -295,49 +320,47 @@
           transform: scale(0.2) translate(var(--x), var(--y));
         }
       }
+
+      .confetti {
+        position: fixed;
+        z-index: 999;
+        pointer-events: none;
+      }
+
+      .birthday-banner {
+        position: fixed;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 300px;
+        z-index: 1002;
+        pointer-events: none;
+        animation: bannerWave 3s ease-in-out infinite;
+      }
+
+      @keyframes bannerWave {
+        0% { transform: translateX(-50%) rotate(-2deg); }
+        50% { transform: translateX(-50%) rotate(2deg); }
+        100% { transform: translateX(-50%) rotate(-2deg); }
+      }
+      
     </style>
   </head>
   <body>
-    <div class="happy-banner">
-      <span class="banner-text">H</span>
-      <span class="banner-text">A</span>
-      <span class="banner-text">P</span>
-      <span class="banner-text">P</span>
-      <span class="banner-text">Y</span><br />
-      <span class="banner-text">B</span>
-      <span class="banner-text">I</span>
-      <span class="banner-text">R</span>
-      <span class="banner-text">T</span>
-      <span class="banner-text">H</span>
-      <span class="banner-text">D</span>
-      <span class="banner-text">A</span>
-      <span class="banner-text">Y</span>
-    </div>
-
-    <div class="cake">
-      <div class="candles">
-        <div class="candle"><div class="flame"></div></div>
-        <div class="candle"><div class="flame"></div></div>
-        <div class="candle"><div class="flame"></div></div>
-      </div>
-      <div class="layer"></div>
-      <div class="layer icing"></div>
-      <div class="layer icing"></div>
-      <div class="layer"></div>
-      <div class="layer icing"></div>
-      <div class="layer"></div>
+    <img src="./banner.png" alt="Happy Birthday" class="birthday-banner" />
+    
     </div>
 
     <script>
       const colors = ["#ff4d4d", "#4da6ff", "#33cc33", "#ffcc00", "#cc66ff"];
-      const snowCount = 100;
+      const snowCount = 40;
 
       function createSnowflakes() {
         Array.from({ length: snowCount }, () => {
           const snow = document.createElement("div");
           snow.className = "snowflake";
           snow.style.left = Math.random() * 100 + "vw";
-          snow.style.animationDuration = Math.random() * 3 + 2 + "s";
+          snow.style.animationDuration = Math.random() * 4 + 5 + "s"; // slower snow
           snow.style.fontSize = "18px";
           snow.style.opacity = Math.random();
           snow.innerText = "❄";
@@ -352,7 +375,7 @@
       function randomPosition() {
         return Math.random() * 100;
       }
-
+      
       function createSpark(x, y, color) {
         const spark = document.createElement("div");
         spark.className = "spark";
@@ -382,7 +405,7 @@
         firework.style.backgroundColor = color;
         firework.style.boxShadow = `0 0 20px ${color}`;
         firework.style.left = `${randomPosition()}vw`;
-        firework.style.bottom = `${randomPosition()}vh`;
+        firework.style.bottom = `${15 + Math.random() * 30}vh`; // Pops between 15%–45% height
 
         document.body.appendChild(firework);
 
@@ -414,7 +437,15 @@
 
         document.body.appendChild(balloon);
 
-        setTimeout(() => balloon.remove(), 8000);
+        setTimeout(() => {
+          if (Math.random() < 0.3) { // 30% chance to pop
+            const rect = balloon.getBoundingClientRect();
+            createPop(rect.left + size / 2, rect.top + size / 2, color);
+            balloon.remove();
+          } else {
+            balloon.remove();
+          }
+        }, 8000);
 
         balloon.addEventListener("click", (e) => {
           e.target.remove();
@@ -479,14 +510,29 @@
       }
 
       function lightCandles() {
-        document
-          .querySelectorAll(".flame")
-          .forEach((f) => f.classList.remove("hidden"));
+        document.querySelectorAll(".flame").forEach(f => f.classList.remove("hidden"));
+        
         const msg = new SpeechSynthesisUtterance(
           "Happy Birthday! Wishing you a wonderful year filled with love, joy, peace."
         );
         msg.lang = "en-US";
         speechSynthesis.speak(msg);
+
+        // Party emoji burst
+        for (let i = 0; i < 20; i++) {
+          const emoji = document.createElement("div");
+          emoji.className = "pop";
+          emoji.textContent = "🥳";
+          emoji.style.position = "absolute";
+          emoji.style.left = Math.random() * window.innerWidth + "px";
+          emoji.style.top = "60%";
+          emoji.style.fontSize = "24px";
+          emoji.style.opacity = "1";
+          document.body.appendChild(emoji);
+
+          animatePop(emoji);
+          setTimeout(() => emoji.remove(), 1500);
+        }
       }
 
       function spawnFireflySwarm() {
@@ -515,7 +561,41 @@
           setTimeout(() => firefly.remove(), duration * 2000);
         });
       }
+      
+      
+      let mouseFireflyCooldown = false;
+      document.addEventListener("mousemove", (e) => {
+        if (mouseFireflyCooldown) return;
+        mouseFireflyCooldown = true;
 
+        const firefly = document.createElement("div");
+        firefly.className = "firefly";
+        firefly.style.left = e.pageX + "px";
+        firefly.style.top = e.pageY + "px";
+        document.body.appendChild(firefly);
+        setTimeout(() => firefly.remove(), 4000);
+
+        setTimeout(() => {
+          mouseFireflyCooldown = false;
+        }, 300); // throttle fireflies to one every 300ms
+      });
+
+      let confettiFired = false;
+      window.addEventListener("click", () => {
+        if (!confettiFired) {
+          confettiFired = true;
+          for (let i = 0; i < 200; i++) {
+            const confetti = document.createElement("div");
+            confetti.className = "confetti";
+            confetti.style.left = `${Math.random() * 100}vw`;
+            confetti.style.animationDelay = `${Math.random() * 2}s`;
+            confetti.style.backgroundColor = randomColor();
+            document.body.appendChild(confetti);
+            setTimeout(() => confetti.remove(), 4000);
+          }
+        }
+      });
+      
       function randomInterval(min, max) {
         return Math.random() * (max - min) + min;
       }
