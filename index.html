@@ -2,8 +2,43 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Snow Cake Celebration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Happy Birthday</title>
     <style>
+      
+      .personal-greeting {
+        position: fixed;
+        top: 70px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 2em;
+        color: #fff;
+        background: #ff69b4;
+        padding: 10px 25px;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.3);
+        z-index: 1002;
+        animation: bounce 1s infinite alternate;
+      }
+
+      .quote-card {
+        position: fixed;
+        top: 30%;
+        left: 5%;
+        width: 250px;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        font-size: 1em;
+        font-style: italic;
+        color: #333;
+      }
+
+      @keyframes floatGift {
+        0% { top: 0; opacity: 1; }
+        100% { top: 100vh; opacity: 0; }
+      }
       body {
         margin: 0;
         background: #2c3e50;
@@ -344,12 +379,63 @@
         100% { transform: translateX(-50%) rotate(-2deg); }
       }
       
+      .personal-name-banner {
+        position: fixed;
+        top: 25vh;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 4em;
+        font-weight: bold;
+        color: transparent;
+        background: linear-gradient(to right, #ff5252, #ffd740, #4fc3f7, #ba68c8);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        padding: 10px 25px;
+        border-radius: 12px;
+        z-index: 1002;
+        animation: bannerWave 3s ease-in-out infinite;
+        text-shadow: none;
+        font-family: "Comic Sans MS", cursive, sans-serif;
+        align-content: center;
+      }
+
+      @media (max-width: 480px) {
+        .personal-greeting {
+          font-size: 1.2em;
+          padding: 6px 15px;
+        }
+
+        .quote-card {
+          width: 90%;
+          left: 5%;
+          font-size: 0.9em;
+        }
+
+        .happy-banner .banner-text {
+          font-size: 1.6em;
+          padding: 5px 10px;
+        }
+
+        .cake-layer {
+          height: 30px;
+        }
+
+        .candles {
+          gap: 5px;
+        }
+
+        .candle {
+          height: 20px;
+        }
+      }
+
     </style>
   </head>
   <body>
-    <img src="./banner.png" alt="Happy Birthday" class="birthday-banner" />
     
-    </div>
+    <img src="./banner.png" alt="Happy Birthday" class="birthday-banner" />
+    <div class="personal-name-banner"> <span id="nameField">Friend</span> </div>
 
     <script>
       const colors = ["#ff4d4d", "#4da6ff", "#33cc33", "#ffcc00", "#cc66ff"];
@@ -439,8 +525,10 @@
 
         setTimeout(() => {
           if (Math.random() < 0.3) { // 30% chance to pop
-            const rect = balloon.getBoundingClientRect();
-            createPop(rect.left + size / 2, rect.top + size / 2, color);
+            // Pop at a random position instead of balloon center
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight * 0.5;
+            createPop(x, y, color);
             balloon.remove();
           } else {
             balloon.remove();
@@ -451,6 +539,18 @@
           e.target.remove();
           createPop(e.clientX, e.clientY, color);
         });
+
+        // Mobile touch support for balloon pops
+        balloon.addEventListener(
+          "touchstart",
+          (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            balloon.remove();
+            createPop(touch.clientX, touch.clientY, color);
+          },
+          { passive: false }
+        );
       }
 
       function createPop(x, y, color) {
@@ -481,6 +581,22 @@
           // Remove the pop after 1 second
           setTimeout(() => pop.remove(), 1000);
         });
+        // Add a random message near the pop
+        const messages = ["You are amazing!", "Smile, it's your day!", "Keep shining!", "Wishing you joy!"];
+        if (Math.random() < 0.3) {
+          const msg = document.createElement("div");
+          msg.textContent = messages[Math.floor(Math.random() * messages.length)];
+          msg.style.position = "absolute";
+          msg.style.left = x + "px";
+          msg.style.top = (y - 30) + "px";
+          msg.style.color = color;
+          msg.style.fontSize = "14px";
+          msg.style.fontWeight = "bold";
+          msg.style.zIndex = 9999;
+          msg.style.textShadow = "0 0 5px #000";
+          document.body.appendChild(msg);
+          setTimeout(() => msg.remove(), 2000);
+        }
       }
 
       function animatePop(pop) {
@@ -562,7 +678,6 @@
         });
       }
       
-      
       let mouseFireflyCooldown = false;
       document.addEventListener("mousemove", (e) => {
         if (mouseFireflyCooldown) return;
@@ -605,11 +720,46 @@
       }
 
       // Initialize animations
+      function dropGiftBox() {
+        const gift = document.createElement("div");
+        gift.textContent = "🎁";
+        gift.style.position = "absolute";
+        gift.style.left = `${Math.random() * 100}vw`;
+        gift.style.top = "0px";
+        gift.style.fontSize = "30px";
+        gift.style.animation = "floatGift 10s linear forwards";
+        gift.style.zIndex = 1006;
+        gift.style.cursor = "pointer";
+
+        gift.addEventListener("click", () => {
+          alert("✨ Surprise! Your presence makes the world better.");
+          gift.remove();
+        });
+
+        document.body.appendChild(gift);
+        setTimeout(() => gift.remove(), 5000);
+      }
+
       window.onload = () => {
         startFireflies();
         createSnowflakes();
         setInterval(spawnBalloon, 1000);
         setInterval(launchFirework, 2000);
+
+        const intro = new SpeechSynthesisUtterance("Hey Priya! This day is just for you. Here's something magical. Enjoy!");
+        intro.lang = 'en-US';
+        //setTimeout(() => speechSynthesis.speak(intro), 2000);
+
+        setInterval(() => {
+          if (Math.random() < 0.2) dropGiftBox();
+        }, 60000);
+
+        // Parse query parameter for name and update nameField and intro message
+        const urlParams = new URLSearchParams(window.location.search);
+        const nameFromUrl = urlParams.get('name');
+        const name = nameFromUrl ? nameFromUrl : "Friend";
+        document.getElementById('nameField').textContent = name;
+        intro.text = `Hey ${name}! This day is just for you. Here's something magical. Enjoy!`;
       };
     </script>
   </body>
