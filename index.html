@@ -37,8 +37,9 @@
 
       @keyframes floatGift {
         0% { top: 0; opacity: 1; }
-        100% { top: 100vh; opacity: 0; }
+        100% { top: 200vh; opacity: 0; }
       }
+
       body {
         margin: 0;
         background: #2c3e50;
@@ -386,18 +387,16 @@
         transform: translateX(-50%);
         font-size: 4em;
         font-weight: bold;
-        color: transparent;
-        background: linear-gradient(to right, #ff5252, #ffd740, #4fc3f7, #ba68c8);
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: white;
         padding: 10px 25px;
         border-radius: 12px;
         z-index: 1002;
         animation: bannerWave 3s ease-in-out infinite;
         text-shadow: none;
-        font-family: "Comic Sans MS", cursive, sans-serif;
+        font-style: normal;
+        font-family: "Komigo", sans-serif;
         align-content: center;
+        text-transform: uppercase;
       }
 
       @media (max-width: 480px) {
@@ -428,6 +427,13 @@
         .candle {
           height: 20px;
         }
+      }
+
+      @font-face {
+        font-family: 'Komigo';
+        src: url('./Komigo3D-Regular.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
       }
 
     </style>
@@ -746,19 +752,23 @@
         setInterval(spawnBalloon, 1000);
         setInterval(launchFirework, 2000);
 
-        const intro = new SpeechSynthesisUtterance("Hey Priya! This day is just for you. Here's something magical. Enjoy!");
+        const intro = new SpeechSynthesisUtterance("Hey Friend! This day is just for you. Here's something magical. Enjoy!");
         intro.lang = 'en-US';
         //setTimeout(() => speechSynthesis.speak(intro), 2000);
 
         setInterval(() => {
-          if (Math.random() < 0.2) dropGiftBox();
-        }, 60000);
+          if (Math.random() < 0.5) dropGiftBox();
+        }, 30000);
 
         // Parse query parameter for name and update nameField and intro message
         const urlParams = new URLSearchParams(window.location.search);
         const nameFromUrl = urlParams.get('name');
         const name = nameFromUrl ? nameFromUrl : "Friend";
-        document.getElementById('nameField').textContent = name;
+        const nameHTML = name.toUpperCase().split("").map(letter => {
+          const color = colors[Math.floor(Math.random() * colors.length)];
+          return `<span style="color: ${color}; display: inline-block;">${letter}</span>`;
+        }).join("");
+        document.getElementById('nameField').innerHTML = nameHTML;
         intro.text = `Hey ${name}! This day is just for you. Here's something magical. Enjoy!`;
       };
     </script>
