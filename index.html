@@ -440,14 +440,39 @@
         font-weight: normal;
         font-style: normal;
       }
-
+      
+      .poem-banner {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50%;
+        /* Remove fixed height and allow flex to control height */
+        background: transparent;
+        color: white;
+        font-family: 'Brush Script MT', cursive;
+        font-size: 1.5em;
+        text-align: center;
+        padding: 20px 30px;
+        border: 3px solid gold;
+        border-radius: 15px;
+        box-shadow: 0 0 15px gold;
+        z-index: 1001;
+        /* Remove white-space: pre-wrap; from container, move to inner poem div */
+        max-width: 90vw;
+        overflow: hidden;
+        max-height: 8em;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
     </style>
   </head>
   <body>
     
     <img src="./banner.png" alt="Happy Birthday" class="birthday-banner" />
     <div class="personal-name-banner"> <span id="nameField">Friend</span> </div>
-
+    <div class="poem-banner" id="poemBanner"></div>
     <script>
       const colors = ["#ff4d4d", "#4da6ff", "#33cc33", "#ffcc00", "#cc66ff"];
       const snowCount = 40;
@@ -751,6 +776,25 @@
         setTimeout(() => gift.remove(), 5000);
       }
 
+      const birthdayPoems = [
+        "May your day be full of cheer,\nWith laughter ringing far and near.",
+        "Another year, a brand new start,\nFilled with joy and happy heart.",
+        "Wishing you skies that are always blue,\nAnd dreams that surely do come true.",
+        "Candles glow and stars align,\nTo bless your life with things divine.",
+        "Let every smile on your face,\nBring sunshine to this lovely place.",
+        "From dawn to dusk, from sun to moon,\nMay happiness find you very soon.",
+        "On wings of joy this message flies,\nTo wish you bliss that never dies.",
+        "With every candle's gentle light,\nYour future glows, your path is bright.",
+        "This day is yours, a sparkling hue,\nA day to cherish all that's you.",
+        "A wish upon a birthday star,\nFor love and peace just as you are."
+      ];
+
+      const chosenPoem = birthdayPoems[Math.floor(Math.random() * birthdayPoems.length)];
+      document.getElementById("poemBanner").innerHTML = `
+        <div style="flex: 1; white-space: pre-wrap; overflow: hidden;">${chosenPoem}</div>
+        <div style="text-align: right; color: gold; font-size: 0.9em; padding-top: 0.5em;">— With love, Phineas</div>
+      `;
+
       window.onload = () => {
         startFireflies();
         createSnowflakes();
@@ -776,6 +820,7 @@
         document.getElementById('nameField').innerHTML = nameHTML;
         intro.text = `Hey ${name}! This day is just for you. Here's something magical. Enjoy!`;
       };
+
     </script>
   </body>
 </html>
